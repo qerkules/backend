@@ -3,7 +3,16 @@ import Car from "../models/Car.js";
 export const getCars = async (req, res) => {
   try {
     const car = await Car.find();
-    res.status(200).json(car);
+
+    const filteredCars = car.sort((c, b) => {
+      if (b.priceUsd > c.priceUsd) {
+        return -1;
+      } else if (b.priceUsd < c.priceUsd) {
+        return 1;
+      }
+      return 0;
+    });
+    res.status(200).json(filteredCars);
     return car;
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -23,8 +32,15 @@ export const getCarById = async (req, res) => {
 export const getCarByClass = async (req, res) => {
   try {
     const car = await Car.find({ class: req.params.class });
-    console.log(car);
-    res.status(200).json(car);
+    const filteredCars = car.sort((c, b) => {
+      if (b.priceUsd > c.priceUsd) {
+        return -1;
+      } else if (b.priceUsd < c.priceUsd) {
+        return 1;
+      }
+      return 0;
+    });
+    res.status(200).json(filteredCars);
     return car;
   } catch (error) {
     res.status(404).json({ message: error.message });
