@@ -31,7 +31,12 @@ export const getCarById = async (req, res) => {
 
 export const getCarByClass = async (req, res) => {
   try {
-    const car = await Car.find({ class: req.params.class });
+    let car;
+    if (req.params.class === "all") {
+      car = await Car.find();
+    } else {
+      car = await Car.find({ class: req.params.class });
+    }
     const filteredCars = car.sort((c, b) => {
       if (b.priceUsd > c.priceUsd) {
         return -1;
